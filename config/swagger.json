@@ -1,0 +1,120 @@
+{
+  "openapi": "3.0.3",
+  "info": {
+    "title": "Task Manager",
+    "description": "REST API for Task Manager",
+    "version": "0.0.1"
+  },
+  "paths": {
+    "/task/get-tasks": {
+      "get": {
+        "summary": "Получить все задачи",
+        "operationId": "TaskList",
+        "responses": {
+          "200": {
+            "description": "Данные получены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Task"
+                      },
+                      "example": [
+                        {
+                          "task_uuid": "2bc278c0-4dd6-11ef-9483-fd1583719fa0",
+                          "task_title": "Test",
+                          "task_description": "Some dsc for task",
+                          "task_created_at": "2024-07-29T18:12:52.429Z",
+                          "task_updated_at": "2024-07-29T18:12:52.429Z"
+                        }
+                      ]
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tasks"
+        ]
+      }
+    },
+    "/task/create": {
+      "post": {
+        "summary": "Создать задачу",
+        "operationId": "CreateTask",
+        "responses": {
+          "201": {
+            "description": "Задача создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Tasks"
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Task": {
+        "type": "object",
+        "properties": {
+          "task_uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "task_title": {
+            "type": "string"
+          },
+          "task_description": {
+            "type": "string"
+          },
+          "task_created_at": {
+            "type": "string",
+            "format": "timestamp without time zone"
+          },
+          "task_updated_at": {
+            "type": "string",
+            "format": "timestamp without time zone"
+          }
+        },
+        "required": [
+          "task_uuid",
+          "task_title",
+          "task_created_at",
+          "task_updated_at"
+        ],
+        "example": {
+          "task_uuid": "2bc278c0-4dd6-11ef-9483-fd1583719fa0",
+          "task_title": "Test",
+          "task_description": "Some dsc for task",
+          "task_created_at": "2024-07-29T18:12:52.429Z",
+          "task_updated_at": "2024-07-29T18:12:52.429Z"
+        }
+      }
+    }
+  }
+}
