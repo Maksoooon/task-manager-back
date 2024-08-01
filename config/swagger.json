@@ -51,6 +51,28 @@
       "post": {
         "summary": "Создать задачу",
         "operationId": "CreateTask",
+        "requestBody": {
+          "description": "Тело запроса для создания задачи",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "task_title": {
+                    "type": "string"
+                  },
+                  "task_description": {
+                    "type": "string",
+                    "nullable": true
+                  }
+                },
+                "required": [
+                  "task_title"
+                ]
+              }
+            }
+          }
+        },
         "responses": {
           "201": {
             "description": "Задача создана",

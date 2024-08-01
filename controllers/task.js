@@ -19,7 +19,7 @@ function createTask(req, res) {
     return Task.create({
         task_uuid: uuid.v1(),
         task_title: req.body.task_title,
-        task_description: req.body.task_description,
+        task_description: req.body.task_description || null,
     })
         .then((task) => res.status(201).send({ data: task }))
         .catch((error) => res.status(500).send(error));
