@@ -7,6 +7,7 @@ const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 
 const { taskRouter } = require("./routes/index");
+const { deskRouter } = require("./routes/index");
 
 const app = express();
 
@@ -20,6 +21,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/task", taskRouter);
+app.use("/desk", deskRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));

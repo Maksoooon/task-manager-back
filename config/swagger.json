@@ -22,16 +22,7 @@
                       "type": "array",
                       "items": {
                         "$ref": "#/components/schemas/Task"
-                      },
-                      "example": [
-                        {
-                          "task_uuid": "2bc278c0-4dd6-11ef-9483-fd1583719fa0",
-                          "task_title": "Test",
-                          "task_description": "Some dsc for task",
-                          "task_created_at": "2024-07-29T18:12:52.429Z",
-                          "task_updated_at": "2024-07-29T18:12:52.429Z"
-                        }
-                      ]
+                      }
                     }
                   },
                   "required": [
@@ -97,10 +88,108 @@
           "Tasks"
         ]
       }
+    },
+    "/desk/get-desks": {
+      "get": {
+        "summary": "Получить все доски",
+        "operationId": "DeskList",
+        "responses": {
+          "200": {
+            "description": "Данные получены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Desk"
+                      }
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Desks"
+        ]
+      }
+    },
+    "/desk/create": {
+      "post": {
+        "summary": "Создать доску",
+        "operationId": "CreateDesk",
+        "requestBody": {
+          "description": "Тело запроса для создания доски",
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "desk_title": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "desk_title"
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Доска создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "$ref": "#/components/schemas/Desk"
+                    }
+                  },
+                  "required": [
+                    "data"
+                  ]
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Desks"
+        ]
+      }
     }
   },
   "components": {
     "schemas": {
+      "Desk": {
+        "type": "object",
+        "properties": {
+          "desk_uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "desk_title": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "desk_uuid", "desk_title"
+        ],
+        "example": {
+          "desk_uuid": "2bc278c0-4dd6-11ef-9483-fd1583719fa0",
+          "desk_title": "Test desk"
+        }
+      },
       "Task": {
         "type": "object",
         "properties": {
@@ -121,20 +210,26 @@
           "task_updated_at": {
             "type": "string",
             "format": "timestamp without time zone"
+          },
+          "desk_uuid": {
+            "type": "string",
+            "format": "uuid"
           }
         },
         "required": [
           "task_uuid",
           "task_title",
           "task_created_at",
-          "task_updated_at"
+          "task_updated_at",
+          "desk_uuid"
         ],
         "example": {
           "task_uuid": "2bc278c0-4dd6-11ef-9483-fd1583719fa0",
           "task_title": "Test",
           "task_description": "Some dsc for task",
           "task_created_at": "2024-07-29T18:12:52.429Z",
-          "task_updated_at": "2024-07-29T18:12:52.429Z"
+          "task_updated_at": "2024-07-29T18:12:52.429Z",
+          "desk_uuid": "d076f660-58ef-11ef-a071-d9d1e5a6383b"
         }
       }
     }

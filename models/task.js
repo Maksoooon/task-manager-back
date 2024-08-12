@@ -4,7 +4,11 @@ const {
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
   class Task extends Model {
-    
+    static associate(models) {
+      Task.belongsTo(models['desks'], {
+        foreignKey: 'desk_uuid'
+      })
+    }
   }
   Task.init({
     task_uuid: {
@@ -12,7 +16,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     task_title: DataTypes.STRING,
-    task_description: DataTypes.STRING
+    task_description: DataTypes.STRING,
+    desk_uuid: {
+      type: DataTypes.UUID,
+      allowNull: false
+    }
   }, {
     sequelize,
     modelName: 'Task',
