@@ -6,7 +6,7 @@
     "version": "0.0.1"
   },
   "paths": {
-    "/task/get-tasks": {
+    "/task": {
       "get": {
         "summary": "Получить все задачи",
         "operationId": "TaskList",
@@ -36,9 +36,7 @@
         "tags": [
           "Tasks"
         ]
-      }
-    },
-    "/task/create": {
+      },
       "post": {
         "summary": "Создать задачу",
         "operationId": "CreateTask",
@@ -89,7 +87,7 @@
         ]
       }
     },
-    "/desk/get-desks": {
+    "/desk": {
       "get": {
         "summary": "Получить все доски",
         "operationId": "DeskList",
@@ -119,9 +117,7 @@
         "tags": [
           "Desks"
         ]
-      }
-    },
-    "/desk/create": {
+      },
       "post": {
         "summary": "Создать доску",
         "operationId": "CreateDesk",
