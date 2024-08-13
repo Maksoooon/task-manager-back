@@ -13,7 +13,7 @@ jobs:
 
     strategy:
       matrix:
-        node-version: ['20.14.0']
+        node-version: [20.14.0]
 
     steps:
     - uses: actions/checkout@v4
@@ -24,7 +24,6 @@ jobs:
         cache: 'npm'
     - name: Install deps
       run: npm ci
-    - name: Start app
     - name: SSH Remote Commands
       uses: appleboy/ssh-action@v0.1.5
       with:
