@@ -32,6 +32,7 @@ Task Manager MM
 }
 ```
 6. Создать папку seeders
+7. Накатить миграции через sequelize db:migrate
 7. Запустить проект npm start
 
 Сервер будет доступен по адресу host:3000
