@@ -24,7 +24,6 @@ jobs:
         cache: 'npm'
     - name: Install deps
       run: npm ci
-    - name: Start app
     - name: SSH Remote Commands
       uses: appleboy/ssh-action@v0.1.5
       with:
