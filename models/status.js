@@ -3,30 +3,24 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class Desk extends Model {
-    static associate(models) {
-        Desk.hasMany(models.Task, {
-            foreignKey: 'desk_uuid',
-            allowNull: true
-        });
-    }
-  }
-  Desk.init({
-    desk_uuid: {
+  class Status extends Model {}
+  Status.init({
+    uuid: {
       type: DataTypes.UUID,
       primaryKey: true,
       allowNull: false
     },
-    desk_title: {
+    name: {
         type: DataTypes.STRING,
-        allowNull: false
+        allowNull: false,
+        require: true
     }
   }, {
     sequelize,
-    modelName: 'desks',
+    modelName: 'status',
     defaultPrimaryKey: false,
     createdAt: false,
     updatedAt: false
   });
-  return Desk;
+  return Status;
 };

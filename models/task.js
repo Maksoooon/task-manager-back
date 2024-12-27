@@ -1,32 +1,125 @@
-'use strict';
-const {
-  Model
-} = require('sequelize');
+"use strict";
+const { Model, Deferrable } = require("sequelize");
 module.exports = (sequelize, DataTypes) => {
-  class Task extends Model {
-    static associate(models) {
-      Task.belongsTo(models['desks'], {
-        foreignKey: 'desk_uuid'
-      })
-    }
-  }
-  Task.init({
-    task_uuid: {
-      type: DataTypes.UUID,
-      primaryKey: true
-    },
-    task_title: DataTypes.STRING,
-    task_description: DataTypes.STRING,
-    desk_uuid: {
-      type: DataTypes.UUID,
-      allowNull: false
-    }
-  }, {
-    sequelize,
-    modelName: 'Task',
-    defaultPrimaryKey: false,
-    createdAt: 'task_created_at',
-    updatedAt: 'task_updated_at'
-  });
-  return Task;
+    const Project = sequelize.define('project', { name: DataTypes.STRING })
+    const Status = sequelize.define('status', { name: DataTypes.STRING })
+    const User = sequelize.define('user', { name: DataTypes.STRING })
+    const Sprint = sequelize.define('sprint', { name: DataTypes.STRING })
+    class Task extends Model {}
+    Task.init(
+        {
+            uuid: {
+                type: DataTypes.UUID,
+                primaryKey: true,
+                allowNull: false,
+            },
+            title: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                require: true,
+            },
+            description: {
+                type: DataTypes.TEXT,
+                allowNull: true,
+                require: false,
+                defaultValue: null,
+                references: {},
+            },
+            type: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                require: true,
+            },
+            author_uuid: {
+                type: DataTypes.UUID,
+                allowNull: false,
+                require: true,
+            },
+            status: {
+                type: DataTypes.STRING,
+                allowNull: false,
+                require: true,
+                defaultValue: "backlog",
+                references: {
+                    model: Status,
+                    key: "name",
+                    deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                },
+            },
+            parent_uuid: {
+                type: DataTypes.UUID,
+                allowNull: true,
+                require: false,
+                references: {
+                    model: User,
+                    key: "uuid",
+                    deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                },
+            },
+            project_uuid: {
+                type: DataTypes.UUID,
+                allowNull: true,
+                defaultValue: null,
+                require: false,
+                references: {
+                    model: Project,
+                    key: "uuid",
+                    deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                },
+            },
+            sprint_uuid: {
+                type: DataTypes.UUID,
+                allowNull: true,
+                defaultValue: null,
+                require: false,
+                references: {
+                    model: Sprint,
+                    key: "uuid",
+                    deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                },
+            },
+            time: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                require: false,
+                defaultValue: null,
+            },
+            fact_time: {
+                type: DataTypes.STRING,
+                allowNull: true,
+                require: false,
+                defaultValue: null,
+            },
+            start_date: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                require: false,
+                defaultValue: null,
+            },
+            end_date: {
+                type: DataTypes.DATE,
+                allowNull: true,
+                require: false,
+                defaultValue: null,
+            },
+            executor_uuid: {
+                type: DataTypes.UUID,
+                allowNull: true,
+                defaultValue: null,
+                references: {
+                    model: User,
+                    key: "uuid",
+                    deferrable: Deferrable.INITIALLY_IMMEDIATE,
+                },
+            },
+        },
+        {
+            sequelize,
+            modelName: "task",
+            defaultPrimaryKey: false,
+            createdAt: false,
+            updatedAt: false,
+        }
+    );
+    return Task;
 };

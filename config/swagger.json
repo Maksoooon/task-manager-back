@@ -53,10 +53,15 @@
                   "task_description": {
                     "type": "string",
                     "nullable": true
+                  },
+                  "desk_uuid": {
+                    "type": "string",
+                    "format":"uuid"
                   }
                 },
                 "required": [
-                  "task_title"
+                  "task_title",
+                  "desk_uuid"
                 ]
               }
             }
