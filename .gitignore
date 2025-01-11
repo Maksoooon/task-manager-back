@@ -3,3 +3,4 @@
 config/config.json
 seeders/
 node_modules/
+.env
