@@ -34,9 +34,11 @@ module.exports = (sequelize, DataTypes) => {
         {
             sequelize,
             modelName: "project",
+            freezeTableName: true,
             defaultPrimaryKey: false,
             createdAt: false,
             updatedAt: false,
+            schema: "task_manager"
         }
     );
     return Project;

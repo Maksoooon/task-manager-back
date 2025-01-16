@@ -30,7 +30,9 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'user',
     defaultPrimaryKey: false,
     createdAt: false,
-    updatedAt: false
+    updatedAt: false,
+    freezeTableName: true,
+    schema: "task_manager"
   });
   return User;
 };
