@@ -20,7 +20,9 @@ module.exports = (sequelize, DataTypes) => {
     modelName: 'status',
     defaultPrimaryKey: false,
     createdAt: false,
-    updatedAt: false
+    updatedAt: false,
+    freezeTableName: true,
+    schema: "task_manager"
   });
   return Status;
 };

@@ -1,8 +1,8 @@
 "use strict";
-const { Model, Deferrable  } = require("sequelize");
+const { Model, Deferrable } = require("sequelize");
 
 module.exports = (sequelize, DataTypes) => {
-    const User = sequelize.define('user', { name: DataTypes.STRING })
+    const User = sequelize.define("user", { name: DataTypes.STRING });
     class Media extends Model {}
     Media.init(
         {
@@ -53,6 +53,8 @@ module.exports = (sequelize, DataTypes) => {
             defaultPrimaryKey: false,
             createdAt: false,
             updatedAt: false,
+            freezeTableName: true,
+            schema: "task_manager",
         }
     );
     return Media;

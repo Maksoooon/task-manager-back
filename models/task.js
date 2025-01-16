@@ -1,10 +1,11 @@
 "use strict";
 const { Model, Deferrable } = require("sequelize");
+
 module.exports = (sequelize, DataTypes) => {
-    const Project = sequelize.define('project', { name: DataTypes.STRING })
-    const Status = sequelize.define('status', { name: DataTypes.STRING })
-    const User = sequelize.define('user', { name: DataTypes.STRING })
-    const Sprint = sequelize.define('sprint', { name: DataTypes.STRING })
+    const Project = sequelize.define("project", { name: DataTypes.STRING });
+    const Status = sequelize.define("status", { name: DataTypes.STRING });
+    const User = sequelize.define("user", { name: DataTypes.STRING });
+    const Sprint = sequelize.define("sprint", { name: DataTypes.STRING });
     class Task extends Model {}
     Task.init(
         {
@@ -119,6 +120,8 @@ module.exports = (sequelize, DataTypes) => {
             defaultPrimaryKey: false,
             createdAt: false,
             updatedAt: false,
+            freezeTableName: true,
+            schema: "task_manager",
         }
     );
     return Task;

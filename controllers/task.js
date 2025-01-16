@@ -1,30 +1,59 @@
-const uuid = require("uuid");
-const Task = require("../models").Task;
+const Task = require("./../models").task;
+const { v4: uuidv4 } = require("uuid");
 
-function getTasks(req, res) {
-    return Task.findAll({
-        order: ["task_created_at"],
-    })
-        .then((data) => {
-            res.status(200).send({ data });
-        })
-        .catch((error) => {
-            res.status(400).send(error);
+async function createTask(req, res) {
+    try {
+        const task = await Task.create({
+            uuid: uuidv4(),
+            ...req.body,
+            author_uuid: req.userId,
         });
+
+        res.status(201).json({ text: "Task created", data: task });
+    } catch (error) {
+        res.status(500).json({ text: "Error on create task", error });
+    }
 }
 
-function createTask(req, res) {
-    return Task.create({
-        task_uuid: uuid.v1(),
-        task_title: req.body.task_title,
-        task_description: req.body.task_description || null,
-        desk_uuid: req.body.desk_uuid
-    })
-        .then((task) => res.status(201).send({ data: task }))
-        .catch((error) => res.status(500).send(error));
+async function getTasks(req, res) {
+    try {
+        const tasks = await Task.findAll({
+            where: {
+                project_uuid: req.params.uuid,
+            },
+            raw: true,
+        });
+
+        res.status(200).json({ text: "Tasks to project", data: tasks });
+    } catch (error) {
+        res.status(500).json({ text: "Error on get tasks", error });
+    }
+}
+
+async function updateTask(req, res) {
+    try {
+        const task = await Task.update(
+            {
+                ...req.body,
+            },
+            {
+                where: {
+                    uuid: req.params.uuid,
+                },
+                returning: true,
+                plain: true,
+            }
+        );
+    
+        res.status(200).json({text: "Task updated", data: task[1]})
+    } catch (error) {
+        res.status(500).json({text: "Error on update", error})
+    }
+    
 }
 
 module.exports = {
     getTasks,
     createTask,
+    updateTask,
 };
