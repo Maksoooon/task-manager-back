@@ -1,10 +1,11 @@
 const jwt = require("jsonwebtoken");
+require('dotenv').config()
 
 async function verifyToken(req, res, next) {
     const token = req.header("Authorization");
     if (!token) return res.status(401).json({ error: "Access denied" });
     try {
-        const decoded = jwt.verify(token, "my-tempo-secret-key");
+        const decoded = jwt.verify(token, process.env.TOKEN_SECRET);
         req.userId = decoded.userId;
         next();
     } catch (error) {
