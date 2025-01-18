@@ -5,6 +5,7 @@ const sprintController = require('./../controllers').sprint;
 
 router.post('/', tokenJobs.verifyToken, sprintController.createSprint);
 router.get('/:uuid', tokenJobs.verifyToken, sprintController.getSprints);
+router.get('/get-one/:uuid', tokenJobs.verifyToken, sprintController.getSprint);
 router.patch('/:uuid', tokenJobs.verifyToken, sprintController.updateSprint);
 
 module.exports = router;

@@ -23,6 +23,16 @@ async function getProjects(req, res) {
     res.status(200).json({ text: "Get projects", data: projects });
 }
 
+async function getProject(req, res) {
+    const project = await Project.findOne({
+        where: {
+            uuid: req.params.uuid
+        }
+    })
+
+    res.status(200).json({ text: "Get project", data: project });
+}
+
 async function updateProject(req, res) {
     try {
         const project = await Project.update(
@@ -66,6 +76,7 @@ async function deleteProject(req, res) {
 module.exports = {
     createProject,
     getProjects,
+    getProject,
     updateProject,
     deleteProject,
 };

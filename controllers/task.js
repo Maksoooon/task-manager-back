@@ -30,6 +30,16 @@ async function getTasks(req, res) {
     }
 }
 
+async function getTask(req, res) {
+    const task = await Task.findOne({
+        where: {
+            uuid: req.params.uuid
+        }
+    })
+
+    res.status(200).json({ text: "Get task", data: task });
+}
+
 async function updateTask(req, res) {
     try {
         const task = await Task.update(
@@ -54,6 +64,7 @@ async function updateTask(req, res) {
 
 module.exports = {
     getTasks,
+    getTask,
     createTask,
     updateTask,
 };

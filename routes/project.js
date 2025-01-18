@@ -5,6 +5,7 @@ const projectController = require('./../controllers').project;
 
 router.post('/create', tokenJobs.verifyToken, projectController.createProject);
 router.get('/', tokenJobs.verifyToken, projectController.getProjects);
+router.get('/:uuid', tokenJobs.verifyToken, projectController.getProject);
 router.patch('/:uuid', tokenJobs.verifyToken, projectController.updateProject);
 router.delete('/:uuid', tokenJobs.verifyToken, projectController.deleteProject);
 
