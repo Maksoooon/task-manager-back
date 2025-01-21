@@ -3,34 +3,50 @@ const { v4: uuidv4 } = require("uuid");
 
 async function createProject(req, res) {
     const { name, description } = req.body;
-    const project = await Project.create({
-        uuid: uuidv4(),
-        name,
-        description,
-        owner: req.userId,
-    });
 
-    res.status(201).json({ text: "Project created", data: project });
+    try {
+        const project = await Project.create({
+            uuid: uuidv4(),
+            name,
+            description,
+            owner: req.userId,
+        });
+    
+        res.status(201).json({ text: "Project created", data: project });
+    } catch (error) {
+        res.status(500).json({ text: "Create error", error });
+    }
+    
 }
 
 async function getProjects(req, res) {
-    const projects = await Project.findAll({
-        where: {
-            owner: req.userId,
-        },
-    });
 
-    res.status(200).json({ text: "Get projects", data: projects });
+    try {
+        const projects = await Project.findAll({
+            where: {
+                owner: req.userId,
+            },
+        });
+    
+        res.status(200).json({ text: "Get projects", data: projects });
+    } catch (error) {
+        res.status(500).json({ text: "Ошибка при получении", error });
+    }
+    
 }
 
 async function getProject(req, res) {
-    const project = await Project.findOne({
-        where: {
-            uuid: req.params.uuid
-        }
-    })
-
-    res.status(200).json({ text: "Get project", data: project });
+    try {
+        const project = await Project.findOne({
+            where: {
+                uuid: req.params.uuid
+            }
+        })
+    
+        res.status(200).json({ text: "Get project", data: project });
+    } catch (error) {
+        res.status(500).json({ text: "Ошибка при получении", error });
+    }
 }
 
 async function updateProject(req, res) {
@@ -51,10 +67,7 @@ async function updateProject(req, res) {
 
         res.status(200).json({ text: "Updated", data: project[1] });
     } catch (error) {
-        res.status(500).json({
-            text: "Error",
-            message: "Project doesn't exists",
-        });
+        res.status(500).json({ text: "Ошибка редактирования", error});
     }
 }
 

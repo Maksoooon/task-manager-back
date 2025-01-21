@@ -5,24 +5,28 @@ const swaggerUi = require("swagger-ui-express");
 const express = require("express");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
+const basicAuth = require('express-basic-auth');
 
 const { taskRouter, authRouter, projectRouter, sprintRouter } = require("./routes/index");
 
 const app = express();
 
 const file = fs.readFileSync("./config/swagger.json", "utf8");
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(JSON.parse(file)));
+app.use("/api-docs", basicAuth({
+    users: {[process.env.SWAGGER_USER]: process.env.SWAGGER_PASSWORD},
+    challenge: true,
+}), swaggerUi.serve, swaggerUi.setup(JSON.parse(file)));
 
 app.use(logger("dev"));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
+app.disable('etag');
 
 app.use("/auth/", authRouter);
 app.use("/project", projectRouter);
 app.use("/task", taskRouter);
-app.use("/sprint", sprintRouter)
+app.use("/sprint", sprintRouter);
 
 app.use(function (req, res, next) {
     next(createError(404));

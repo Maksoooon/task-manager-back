@@ -17,7 +17,7 @@ async function registration(req, res) {
 
         res.status(201).json({ text: "User created" });
     } catch (error) {
-        res.status(500).json({ error: "Registration failed", err: error });
+        res.status(500).json({ text: "Registration failed", error });
     }
 }
 

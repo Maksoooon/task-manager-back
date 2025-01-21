@@ -5,116 +5,947 @@
     "description": "REST API for Task Manager",
     "version": "0.0.1"
   },
+  "tags": [
+    {
+      "name": "Auth"
+    },
+    {
+      "name": "Project"
+    },
+    {
+      "name": "Task"
+    },
+    {
+      "name": "Sprint"
+    },
+    {
+      "name": "Media"
+    }
+  ],
   "paths": {
-    "/task": {
+    "/auth/test": {
       "get": {
-        "summary": "Получить все задачи",
-        "operationId": "TaskList",
+        "summary": "Проверка работы сервера",
         "responses": {
           "200": {
-            "description": "Данные получены",
+            "description": "Работает",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "type": "array",
-                      "items": {
-                        "$ref": "#/components/schemas/Task"
-                      }
+                    "status": {
+                      "type": "string"
                     }
-                  },
-                  "required": [
-                    "data"
-                  ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Не работает",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object"
                 }
               }
             }
           }
         },
         "tags": [
-          "Tasks"
+          "Auth"
         ]
-      },
+      }
+    },
+    "/auth/registration": {
       "post": {
-        "summary": "Создать задачу",
-        "operationId": "CreateTask",
+        "summary": "Создать пользователя",
         "requestBody": {
-          "description": "Тело запроса для создания задачи",
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "task_title": {
-                    "type": "string"
-                  },
-                  "task_description": {
-                    "type": "string",
-                    "nullable": true
-                  },
-                  "desk_uuid": {
-                    "type": "string",
-                    "format":"uuid"
-                  }
-                },
-                "required": [
-                  "task_title",
-                  "desk_uuid"
-                ]
-              }
-            }
-          }
+          "$ref": "#/components/requestBodies/Auth"
         },
         "responses": {
           "201": {
-            "description": "Задача создана",
+            "description": "Пользователь создан",
             "content": {
               "application/json": {
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "data": {
-                      "$ref": "#/components/schemas/Task"
+                    "text": {
+                      "type": "string"
                     }
-                  },
-                  "required": [
-                    "data"
-                  ]
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
                 }
               }
             }
           }
         },
         "tags": [
-          "Tasks"
+          "Auth"
         ]
       }
+    },
+    "/auth/login": {
+      "post": {
+        "summary": "Авторизация по логину и паролю",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Auth"
+        },
+        "responses": {
+          "201": {
+            "description": "Успешная авторизация",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "token": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Ошибка авторизации, проверьте логин и пароль",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/auth/me": {
+      "post": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Проверка токена",
+        "responses": {
+          "200": {
+            "description": "Токен рабочий",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "userId": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "boolean"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Auth"
+        ]
+      }
+    },
+    "/project/create": {
+      "post": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Создание проекта",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Project"
+        },
+        "responses": {
+          "201": {
+            "description": "Проект создан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/project": {
+      "get": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Получить свои проекты",
+        "responses": {
+          "200": {
+            "description": "Проекты получены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Project"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/project/{uuid}": {
+      "get": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Получить проект",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid проекта",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Проект получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      },
+      "patch": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateProject"
+        },
+        "summary": "Редактировать проект",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid проекта",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Успешно",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Project"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      },
+      "delete": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Удалить проект",
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid проекта",
+            "required": true,
+            "type": "string",
+            "format": "uuid"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Проект удален",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Project"
+        ]
+      }
+    },
+    "/task": {
+      "post": {}
+    },
+    "/task/{uuid}": {
+      "get": {},
+      "patch": {}
+    },
+    "/task/get-one/{uuid}": {
+      "get": {}
+    },
+    "/sprint": {
+      "post": {}
+    },
+    "/spint/{uuid}": {
+      "get": {},
+      "patch": {}
+    },
+    "/sprint/get-one/:uuid": {
+      "get": {}
     }
   },
   "components": {
+    "securitySchemes": {
+      "Authorization": {
+        "type": "apiKey",
+        "name": "authorization",
+        "in": "header"
+      }
+    },
+    "requestBodies": {
+      "Auth": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "email": {
+                  "type": "string",
+                  "format": "email"
+                },
+                "password": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "email",
+                "password"
+              ]
+            }
+          }
+        }
+      },
+      "Project": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              },
+              "required": [
+                "name"
+              ]
+            }
+          }
+        }
+      },
+      "UpdateProject": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "name": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "responses": {},
     "schemas": {
-      "models": {},
-      "responses": {},
-      "Desk": {
+      "User": {
+        "description": "Пользователь",
         "type": "object",
         "properties": {
-          "desk_uuid": {
+          "uuid": {
             "type": "string",
             "format": "uuid"
           },
-          "desk_title": {
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
             "type": "string"
           }
         },
         "required": [
-          "desk_uuid", "desk_title"
-        ],
-        "example": {
-          "desk_uuid": "2bc278c0-4dd6-11ef-9483-fd1583719fa0",
-          "desk_title": "Test desk"
-        }
+          "uuid",
+          "email",
+          "password"
+        ]
+      },
+      "Task": {
+        "description": "Задача",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type":"string",
+            "format":"uuid"
+          },
+          "title": {
+            "type":"string"
+          },
+          "description": {
+            "type":"string"
+          },
+          "type": {
+            "type": "string"
+          },
+          "author_uuid": {
+            "type":"string",
+            "format":"uuid"
+          },
+          "status": {
+            "type": "string"
+          },
+          "parent_uuid": {
+            "type":"string",
+            "format":"uuid",
+            "nullable": true
+          },
+          "project_uuid": {
+            "type":"string",
+            "format":"uuid"
+          },
+          "sprint_uuid": {
+            "type":"string",
+            "format":"uuid",
+            "nullable": true
+          },
+          "time": {
+            "type":"string"
+          },
+          "fact_time": {
+            "type":"string"
+          },
+          "start_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "end_date": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "execurot_uuid": {
+            "type":"string",
+            "format":"uuid",
+            "nullable":true
+          }
+        },
+        "required": ["uuid", "title", "author_uuid", "project_uuid"]
+      },
+      "Task_type": {
+        "description": "Тип задачи",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "project_uuid": {
+            "type": "string",
+            "format": "uuid",
+            "nullable": false
+          }
+        },
+        "required": [
+          "uuid",
+          "name",
+          "project_uuid"
+        ]
+      },
+      "Status": {
+        "description": "Статус задачи",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "uuid",
+          "name"
+        ]
+      },
+      "Sprint": {
+        "description": "Спринт",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "title": {
+            "type": "string"
+          },
+          "project_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "start_date": {
+            "type": "string"
+          },
+          "end_date": {
+            "type": "string"
+          },
+          "status": {
+            "type": "string",
+            "enum": [
+              "backlog",
+              "in_progress",
+              "finished"
+            ]
+          },
+          "author_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "uuid",
+          "title",
+          "project_id",
+          "start_date",
+          "end_date",
+          "status",
+          "author_id"
+        ]
+      },
+      "Project": {
+        "description": "Проект",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "owner": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "uuid",
+          "name",
+          "owner"
+        ]
+      },
+      "Project_to_status": {
+        "description": "Статусы проекта",
+        "type": "object",
+        "properties": {
+          "project_uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "status_uuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "project_uuid",
+          "status_uuid"
+        ]
+      },
+      "Media": {
+        "description": "Медиа",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "name": {
+            "type": "string"
+          },
+          "mimetype": {
+            "type": "string"
+          },
+          "length": {
+            "type": "integer"
+          },
+          "encoding": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "uuid",
+          "name",
+          "mimetype",
+          "length",
+          "encoding",
+          "author_id"
+        ]
+      },
+      "Commet": {
+        "description": "Комментарий",
+        "type": "object",
+        "properties": {
+          "uuid": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "text": {
+            "type": "string"
+          },
+          "author_id": {
+            "type": "string",
+            "format": "uuid"
+          },
+          "task_uuid": {
+            "type": "string",
+            "format": "uuid"
+          }
+        },
+        "required": [
+          "uuid",
+          "text",
+          "author_id",
+          "task_uuid"
+        ]
       }
     }
   }
