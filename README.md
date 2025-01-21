@@ -1,7 +1,5 @@
 Task Manager MM
 
-Test
-
 Инструкция по развертке
 1. Скачать проект
 2. Скачать пакеты - npm ci / npm install
