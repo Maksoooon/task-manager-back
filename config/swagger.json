@@ -373,9 +373,10 @@
             "name": "uuid",
             "in": "path",
             "description": "Uuid проекта",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
+            "schema": {
+              "type": "string"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -450,9 +451,10 @@
             "name": "uuid",
             "in": "path",
             "description": "Uuid проекта",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
+            "schema": {
+              "type": "string"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -524,9 +526,10 @@
             "name": "uuid",
             "in": "path",
             "description": "Uuid проекта",
-            "required": true,
-            "type": "string",
-            "format": "uuid"
+            "schema": {
+              "type": "string"
+            },
+            "required": true
           }
         ],
         "responses": {
@@ -585,24 +588,612 @@
       }
     },
     "/task": {
-      "post": {}
+      "post": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Создание задачи",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Task"
+        },
+        "responses": {
+          "201": {
+            "description": "Задача создана",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Task"
+        ]
+      }
     },
     "/task/{uuid}": {
-      "get": {},
-      "patch": {}
+      "get": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid проекта",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Получить задачи по проекту",
+        "responses": {
+          "200": {
+            "description": "Задачи получены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Task"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Task"
+        ]
+      },
+      "patch": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid задачи",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Обновление задачи",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateTask"
+        },
+        "responses": {
+          "200": {
+            "description": "Задача обновлена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Task"
+        ]
+      }
     },
     "/task/get-one/{uuid}": {
-      "get": {}
+      "get": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid задачи",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Получить задачу",
+        "responses": {
+          "200": {
+            "description": "Задача получена",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Task"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Task"
+        ]
+      }
     },
     "/sprint": {
-      "post": {}
+      "post": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "summary": "Создание спринта",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/Task"
+        },
+        "responses": {
+          "201": {
+            "description": "Спринт создан",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Sprint"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Sprint"
+        ]
+      }
     },
     "/spint/{uuid}": {
-      "get": {},
-      "patch": {}
+      "get": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid проекта",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Получить спринты по проекту",
+        "responses": {
+          "200": {
+            "description": "Спринты получены",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/Sprint"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Sprint"
+        ]
+      },
+      "patch": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid проекта",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Обновление спринта",
+        "requestBody": {
+          "$ref": "#/components/requestBodies/UpdateSprint"
+        },
+        "responses": {
+          "200": {
+            "description": "Спринт обновлен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Sprint"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Sprint"
+        ]
+      }
     },
-    "/sprint/get-one/:uuid": {
-      "get": {}
+    "/sprint/get-one/{uuid}": {
+      "get": {
+        "security": [
+          {
+            "Authorization": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "uuid",
+            "in": "path",
+            "description": "Uuid спринта",
+            "schema": {
+              "type": "string"
+            },
+            "required": true
+          }
+        ],
+        "summary": "Получить спринт",
+        "responses": {
+          "200": {
+            "description": "Спринт получен",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "data": {
+                      "$ref": "#/components/schemas/Sprint"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Нет доступа",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "error": {
+                      "type": "string"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "500": {
+            "description": "Ошибка",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "text": {
+                      "type": "string"
+                    },
+                    "error": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "tags": [
+          "Sprint"
+        ]
+      }
     }
   },
   "components": {
@@ -672,9 +1263,200 @@
             }
           }
         }
+      },
+      "Task": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "parent_uuid": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                },
+                "sprint_uuid": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                },
+                "time": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "fact_time": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "start_date": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "end_date": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "project_uuid": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "executor_uuid": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                }
+              },
+              "required": [
+                "title",
+                "status",
+                "project_uuid"
+              ]
+            }
+          }
+        }
+      },
+      "UpdateTask": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type": "object",
+              "properties": {
+                "title": {
+                  "type": "string"
+                },
+                "description": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "type": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "parent_uuid": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                },
+                "sprint_uuid": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                },
+                "time": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "fact_time": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "start_date": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "end_date": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "status": {
+                  "type": "string",
+                  "nullable": true
+                },
+                "project_uuid": {
+                  "type": "string",
+                  "format": "uuid"
+                },
+                "executor_uuid": {
+                  "type": "string",
+                  "format": "uuid",
+                  "nullable": true
+                }
+              }
+            }
+          }
+        }
+      },
+      "Sprint": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type":"object",
+              "properties": {
+                "title": {
+                  "type":"string"
+                },
+                "project_id": {
+                  "type":"string",
+                  "format":"uuid"
+                },
+                "start_date": {
+                  "type": "string"
+                },
+                "end_date": {
+                  "type": "string"
+                },
+                "status": {
+                  "type":"string",
+                  "enum":[
+                    "backlog",
+                    "finished",
+                    "in_progress"
+                  ]
+                }
+              },
+              "required":["title", "project_id", "status"]
+            }
+          }
+        }
+      },
+      "UpdateSprint": {
+        "content": {
+          "application/json": {
+            "schema": {
+              "type":"object",
+              "properties": {
+                "title": {
+                  "type":"string"
+                },
+                "project_id": {
+                  "type":"string",
+                  "format":"uuid"
+                },
+                "start_date": {
+                  "type": "string"
+                },
+                "end_date": {
+                  "type": "string"
+                },
+                "status": {
+                  "type":"string",
+                  "enum":[
+                    "backlog",
+                    "finished",
+                    "in_progress"
+                  ]
+                }
+              }
+            }
+          }
+        }
       }
     },
-    "responses": {},
     "schemas": {
       "User": {
         "description": "Пользователь",
@@ -703,44 +1485,44 @@
         "type": "object",
         "properties": {
           "uuid": {
-            "type":"string",
-            "format":"uuid"
+            "type": "string",
+            "format": "uuid"
           },
           "title": {
-            "type":"string"
+            "type": "string"
           },
           "description": {
-            "type":"string"
+            "type": "string"
           },
           "type": {
             "type": "string"
           },
           "author_uuid": {
-            "type":"string",
-            "format":"uuid"
+            "type": "string",
+            "format": "uuid"
           },
           "status": {
             "type": "string"
           },
           "parent_uuid": {
-            "type":"string",
-            "format":"uuid",
+            "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "project_uuid": {
-            "type":"string",
-            "format":"uuid"
+            "type": "string",
+            "format": "uuid"
           },
           "sprint_uuid": {
-            "type":"string",
-            "format":"uuid",
+            "type": "string",
+            "format": "uuid",
             "nullable": true
           },
           "time": {
-            "type":"string"
+            "type": "string"
           },
           "fact_time": {
-            "type":"string"
+            "type": "string"
           },
           "start_date": {
             "type": "string",
@@ -751,12 +1533,17 @@
             "format": "date-time"
           },
           "execurot_uuid": {
-            "type":"string",
-            "format":"uuid",
-            "nullable":true
+            "type": "string",
+            "format": "uuid",
+            "nullable": true
           }
         },
-        "required": ["uuid", "title", "author_uuid", "project_uuid"]
+        "required": [
+          "uuid",
+          "title",
+          "author_uuid",
+          "project_uuid"
+        ]
       },
       "Task_type": {
         "description": "Тип задачи",
